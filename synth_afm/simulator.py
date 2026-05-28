@@ -6,16 +6,25 @@ from synth_afm.kernels import simple_height_map_kernel, tip_sample_height_map
 
 class AFMSimulator:
     """
-    High-level simulator for generating HS-AFM images.
+    High-level simulator for generating HS-AFM images and movies.
     """
 
     def __init__(
         self,
         pixel_size: float = 1.0,
         grid_size: tuple[int, int] = (64, 64),
-        tip_radius: float = 10.0,
+        tip_radius: float = 20.0,
         smoothness: float = 0.5,
     ):
+        """
+        Initialize the AFM simulator.
+
+        Args:
+            pixel_size: Size of a single pixel in Angstroms.
+            grid_size: (Height, Width) of the resulting image.
+            tip_radius: Radius of the AFM tip in Angstroms.
+            smoothness: Smoothness of the Log-Sum-Exp max approximation.
+        """
         self.pixel_size = pixel_size
         self.grid_size = grid_size
         self.tip_radius = tip_radius
@@ -33,16 +42,15 @@ class AFMSimulator:
         use_tip_dilation: bool = True,
     ) -> jax.Array:
         """
-        Generates a height map for the given positions.
+        Generates a height map for the given atomic positions.
 
         Args:
             positions: (N, 3) atomic coordinates.
-            radii: (N,) atomic radii. If None, uses a default of 2.0 Å.
+            radii: (N,) atomic radii. If None, uses default 1.7A (Carbon).
             use_tip_dilation: If True, uses the realistic tip-dilation kernel.
-                              If False, uses a simple point-tip height map.
         """
         if radii is None:
-            radii = jnp.full((positions.shape[0],), 2.0)
+            radii = jnp.full((positions.shape[0],), 1.7)
 
         if use_tip_dilation:
             return tip_sample_height_map(
@@ -67,8 +75,7 @@ class AFMSimulator:
     ) -> jax.Array:
         """
         Generates a movie of HS-AFM images from a coordinate trajectory.
-        Simulates scanning lag by sampling different time-steps for each line
-        within a single frame.
+        Simulates scanning lag by sampling different time-steps for each line.
 
         Args:
             trajectory: (T, N, 3) atomic coordinates over time.
@@ -83,24 +90,18 @@ class AFMSimulator:
         h, w = self.grid_size
 
         if radii is None:
-            radii = jnp.full((n_atoms,), 2.0)
+            radii = jnp.full((n_atoms,), 1.7)
 
         # Time per line in seconds (assuming constant scan speed)
         dt_line = 1.0 / (frames_per_second * h)
-        
-        # We'll use vmap for frames, and a nested logic for lines.
-        # For simplicity in this first version, we map each line to the nearest 
-        # integer time step in the trajectory. 
-        # Future: Use jax.numpy.interp for sub-step resolution.
 
         def _scan_one_frame(t_start_idx: int) -> jax.Array:
             def _scan_one_line(y_idx: int) -> jax.Array:
                 # Calculate time offset for this specific line
-                # Clamp to avoid going out of trajectory bounds
                 t_offset = jnp.round(y_idx * dt_line * frames_per_second).astype(jnp.int32)
                 t_curr = jnp.minimum(t_start_idx + t_offset, t_steps - 1)
                 
-                # Use dynamic_slice to extract just one line from the grid
+                # Extract line grid
                 line_x = jax.lax.dynamic_slice(self.grid_x, (0, y_idx), (h, 1))
                 line_y = jax.lax.dynamic_slice(self.grid_y, (0, y_idx), (h, 1))
                 
@@ -114,7 +115,21 @@ class AFMSimulator:
                     )
                 return res[:, 0]
 
-            # Collect all lines to form a frame
             return jax.vmap(_scan_one_line)(jnp.arange(h)).T
 
         return jax.vmap(_scan_one_frame)(jnp.arange(t_steps))
+
+    def compute_force_map(
+        self,
+        positions: jax.Array,
+        radii: jax.Array,
+        z_heights: jax.Array,
+        k_cantilever: float = 0.1,
+    ) -> jax.Array:
+        """
+        Experimental: Computes a force map (deflection) based on tip-sample 
+        repulsion. Very simplified Hookean model.
+        """
+        sample_height = self.scan(positions, radii)
+        compression = jnp.maximum(sample_height - z_heights, 0.0)
+        return cast(jax.Array, k_cantilever * compression)
