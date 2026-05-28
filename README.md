@@ -42,6 +42,13 @@ HS-AFM provides a unique look at "proteins at work," but interpreting noisy movi
 pip install synth-afm
 ```
 
+## 📖 Tutorials
+
+Get started immediately with our interactive Jupyter notebooks:
+
+*   **[Quick Start: Differentiable HS-AFM Simulation](examples/quickstart_afm.ipynb)**: Learn how to generate height maps with tip dilation and scanning lag.  
+    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/synth-afm/blob/master/examples/quickstart_afm.ipynb)
+
 ## 🛠 Quick Start
 
 ```python
