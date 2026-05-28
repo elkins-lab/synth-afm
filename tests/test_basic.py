@@ -60,3 +60,11 @@ def test_tip_dilation_effect() -> None:
     # Center is at index (10, 10) for pixel_size 0.5
     assert img_dilated[15, 10] > 0.0
     assert img_point[15, 10] == 0.0
+
+
+def test_scan_movie_shape() -> None:
+    """Scanning a trajectory should return a 3D volume of images."""
+    sim = AFMSimulator(grid_size=(16, 16))
+    trajectory = jnp.zeros((5, 10, 3))  # 5 frames, 10 atoms
+    movie = sim.scan_movie(trajectory)
+    assert movie.shape == (5, 16, 16)

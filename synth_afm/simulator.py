@@ -67,12 +67,13 @@ class AFMSimulator:
     ) -> jax.Array:
         """
         Generates a movie of HS-AFM images from a coordinate trajectory.
-        Simulates scanning lag by sampling different time-steps for each line.
+        Simulates scanning lag by sampling different time-steps for each line
+        within a single frame.
 
         Args:
             trajectory: (T, N, 3) atomic coordinates over time.
             radii: (N,) atomic radii.
-            frames_per_second: Nominal scan rate.
+            frames_per_second: Nominal scan rate (FPS).
             use_tip_dilation: Whether to use the realistic tip model.
 
         Returns:
@@ -84,9 +85,36 @@ class AFMSimulator:
         if radii is None:
             radii = jnp.full((n_atoms,), 2.0)
 
-        def _scan_one_frame(t_idx: int) -> jax.Array:
-            # Simple implementation: sample coordinates for the whole frame.
-            # Future expansion: sample line-by-line using jax.lax.scan
-            return self.scan(trajectory[t_idx], radii, use_tip_dilation)
+        # Time per line in seconds (assuming constant scan speed)
+        dt_line = 1.0 / (frames_per_second * h)
+        
+        # We'll use vmap for frames, and a nested logic for lines.
+        # For simplicity in this first version, we map each line to the nearest 
+        # integer time step in the trajectory. 
+        # Future: Use jax.numpy.interp for sub-step resolution.
+
+        def _scan_one_frame(t_start_idx: int) -> jax.Array:
+            def _scan_one_line(y_idx: int) -> jax.Array:
+                # Calculate time offset for this specific line
+                # Clamp to avoid going out of trajectory bounds
+                t_offset = jnp.round(y_idx * dt_line * frames_per_second).astype(jnp.int32)
+                t_curr = jnp.minimum(t_start_idx + t_offset, t_steps - 1)
+                
+                # Use dynamic_slice to extract just one line from the grid
+                line_x = jax.lax.dynamic_slice(self.grid_x, (0, y_idx), (h, 1))
+                line_y = jax.lax.dynamic_slice(self.grid_y, (0, y_idx), (h, 1))
+                
+                if use_tip_dilation:
+                    res = tip_sample_height_map(
+                        trajectory[t_curr], radii, line_x, line_y, self.tip_radius, self.smoothness
+                    )
+                else:
+                    res = simple_height_map_kernel(
+                        trajectory[t_curr], radii, line_x, line_y, self.smoothness
+                    )
+                return res[:, 0]
+
+            # Collect all lines to form a frame
+            return jax.vmap(_scan_one_line)(jnp.arange(h)).T
 
         return jax.vmap(_scan_one_frame)(jnp.arange(t_steps))
