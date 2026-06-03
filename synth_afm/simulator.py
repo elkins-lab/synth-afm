@@ -95,8 +95,8 @@ class AFMSimulator:
         # Time per line in seconds (assuming constant scan speed)
         dt_line = 1.0 / (frames_per_second * h)
 
-        def _scan_one_frame(t_start_idx: int) -> jax.Array:
-            def _scan_one_line(y_idx: int) -> jax.Array:
+        def _scan_one_frame(t_start_idx: jax.Array) -> jax.Array:
+            def _scan_one_line(y_idx: jax.Array) -> jax.Array:
                 # Calculate time offset for this specific line
                 t_offset = jnp.round(y_idx * dt_line * frames_per_second).astype(jnp.int32)
                 t_curr = jnp.minimum(t_start_idx + t_offset, t_steps - 1)

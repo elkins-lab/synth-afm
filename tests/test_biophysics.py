@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import pytest
 import os
+import pathlib
 from synth_afm.io import load_coords_and_radii
 from synth_afm.simulator import AFMSimulator
 from synth_afm.constants import VDW_RADII
@@ -14,7 +15,7 @@ def test_vdw_radii_assignment() -> None:
     assert VDW_RADII["N"] == 1.55
 
 
-def test_io_and_scan_consistency(tmp_path) -> None:
+def test_io_and_scan_consistency(tmp_path: pathlib.Path) -> None:
     """Loading a PDB and scanning should work end-to-end."""
     # Create a minimal mock PDB file
     pdb_content = (

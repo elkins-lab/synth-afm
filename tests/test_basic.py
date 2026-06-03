@@ -68,3 +68,11 @@ def test_scan_movie_shape() -> None:
     trajectory = jnp.zeros((5, 10, 3))  # 5 frames, 10 atoms
     movie = sim.scan_movie(trajectory)
     assert movie.shape == (5, 16, 16)
+
+
+def test_scan_movie_no_tip_dilation() -> None:
+    """Scanning a movie without tip dilation should also work."""
+    sim = AFMSimulator(grid_size=(16, 16))
+    trajectory = jnp.zeros((2, 5, 3))
+    movie = sim.scan_movie(trajectory, use_tip_dilation=False)
+    assert movie.shape == (2, 16, 16)

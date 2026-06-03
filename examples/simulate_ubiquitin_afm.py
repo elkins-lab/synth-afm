@@ -39,7 +39,7 @@ print(f"Static image shape: {static_img.shape}")
 # 4. Simulate HS-AFM Scanning Lag
 # We'll create a 10-frame trajectory where the molecule rotates.
 print("Generating trajectory...")
-trajectory = []
+trajectory_frames = []
 for angle in jnp.linspace(0, jnp.pi, 10):
     # Rotate around Z axis
     rot = jnp.array([
@@ -47,9 +47,9 @@ for angle in jnp.linspace(0, jnp.pi, 10):
         [jnp.sin(angle),  jnp.cos(angle), 0],
         [0, 0, 1]
     ])
-    trajectory.append(coords @ rot.T)
+    trajectory_frames.append(coords @ rot.T)
 
-trajectory = jnp.stack(trajectory) # (10, 100, 3)
+trajectory = jnp.stack(trajectory_frames) # (10, 100, 3)
 
 print("Simulating HS-AFM movie with scanning lag...")
 # We use a slow FPS to make the lag effects obvious
