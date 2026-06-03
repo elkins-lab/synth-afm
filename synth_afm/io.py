@@ -1,7 +1,5 @@
-import biotite.structure as struc
 import biotite.structure.io as strucio
 import jax.numpy as jnp
-import numpy as np
 from typing import Tuple
 from synth_afm.constants import VDW_RADII, DEFAULT_ATOM_RADIUS
 
