@@ -1,6 +1,5 @@
 import jax
 import jax.numpy as jnp
-import pytest
 from synth_afm.simulator import AFMSimulator
 
 

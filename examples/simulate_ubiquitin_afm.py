@@ -7,9 +7,7 @@ This script demonstrates how to:
 3. Simulate a movie with "Scanning Lag" (temporal distortion).
 """
 
-import jax
 import jax.numpy as jnp
-import numpy as np
 from synth_afm.simulator import AFMSimulator
 
 # 1. Generate / Setup Coordinates

@@ -1,5 +1,4 @@
 import jax.numpy as jnp
-import pytest
 import os
 import pathlib
 from synth_afm.io import load_coords_and_radii
