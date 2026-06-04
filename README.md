@@ -32,9 +32,11 @@ HS-AFM provides a unique look at "proteins at work," but interpreting noisy movi
 ## 🚀 Key Features
 
 *   **Differentiable Height Mapping:** Efficient Log-Sum-Exp collision detection for sub-nanometer topography.
+*   **Physical Realism:** Simulate cantilever noise and substrate tilt (linear gradients) to match experimental conditions.
 *   **Scanning Lag Simulation:** Models the line-by-line temporal delay inherent in pixel-by-pixel acquisition.
-*   **Flexible Tip Geometries:** Supports spherical and parabolic tip-shape dilation.
-*   **Integration:** Reads PDB/mmCIF files via `biotite` and integrates with `synth-pdb` and `resonance-flow`.
+*   **Memory Efficiency:** Uses `jax.lax.scan` for constant-memory simulation of long trajectories.
+*   **Flexible Tip Geometries:** Supports spherical tip-shape dilation.
+*   **Integration:** Reads PDB/mmCIF files via `biotite` and integrates with `synth-pdb` and `synth-dynamics`.
 
 ## 📦 Installation
 
@@ -59,8 +61,13 @@ from synth_afm.io import load_coords_and_radii
 # 1. Load your structure (N, 3) and radii (N,)
 coords, radii = load_coords_and_radii("molecule.pdb")
 
-# 2. Initialize simulator (1A pixel size, 2nm tip radius)
-sim = AFMSimulator(pixel_size=1.0, tip_radius=20.0)
+# 2. Initialize simulator (1A pixel size, 2nm tip radius, 0.5A noise, slight tilt)
+sim = AFMSimulator(
+    pixel_size=1.0, 
+    tip_radius=20.0, 
+    noise_level=0.5, 
+    substrate_tilt=(0.01, 0.0)
+)
 
 # 3. Generate height map (Differentiable!)
 height_map = sim.scan(coords, radii)
