@@ -138,3 +138,13 @@ def test_movie_memory_efficiency() -> None:
     movie = sim.scan_movie(trajectory)
     assert movie.shape == (T, 16, 16)
 
+def test_movie_default_noise() -> None:
+    """Verify that noise is applied in scan_movie even if no key is passed."""
+    sim = AFMSimulator(grid_size=(16, 16), noise_level=1.0)
+    trajectory = jnp.zeros((2, 1, 3))
+    
+    movie = sim.scan_movie(trajectory) # No key passed
+    assert jnp.std(movie[0]) > 0.5
+    assert not jnp.allclose(movie[0], movie[1])
+
+

@@ -162,6 +162,9 @@ class AFMSimulator:
                 
             return jnp.maximum(img, 0.0)
 
+        if key is None and self.noise_level > 0.0:
+            key = jax.random.PRNGKey(0)
+
         if key is not None:
             keys = jax.random.split(key, t_steps)
         else:
@@ -169,8 +172,8 @@ class AFMSimulator:
 
         def _body_fn(carry, x):
             idx, k = x
-            # Only use key if noise is enabled and key is not dummy
-            actual_key = k if (self.noise_level > 0.0 and key is not None) else None
+            # Use key if it's not a dummy (meaning key was provided or defaulted)
+            actual_key = k if key is not None else None
             return carry, _scan_one_frame(idx, actual_key)
 
         _, movie = jax.lax.scan(
