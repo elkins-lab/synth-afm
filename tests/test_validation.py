@@ -101,3 +101,40 @@ def test_gradient_wrt_tip_radius() -> None:
         
     grad = jax.grad(loss_fn)(20.0)
     assert grad > 0.0 # Increasing tip radius should increase total height (dilation)
+
+def test_noise_application() -> None:
+    """Verify that noise_level adds randomness to the scan."""
+    sim = AFMSimulator(grid_size=(32, 32), noise_level=1.0)
+    coords = jnp.array([[16.0, 16.0, 10.0]])
+    
+    key1 = jax.random.PRNGKey(1)
+    key2 = jax.random.PRNGKey(2)
+    
+    img1 = sim.scan(coords, key=key1)
+    img2 = sim.scan(coords, key=key2)
+    
+    assert not jnp.allclose(img1, img2)
+    assert jnp.std(img1) > 0.5 # Substantial noise
+
+def test_substrate_tilt() -> None:
+    """Verify that substrate_tilt adds a linear gradient."""
+    # 0.1A per Angstrom tilt along X
+    sim = AFMSimulator(grid_size=(10, 10), pixel_size=1.0, substrate_tilt=(0.1, 0.0))
+    
+    # Flat surface (no atoms)
+    coords = jnp.array([[0.0, 0.0, -100.0]]) # Far away
+    img = sim.scan(coords)
+    
+    # At x=0, tilt=0. At x=9, tilt=0.9
+    assert jnp.isclose(img[0, 0], 0.0)
+    assert jnp.isclose(img[9, 0], 0.9)
+
+def test_movie_memory_efficiency() -> None:
+    """Scan a long trajectory to ensure lax.scan works as expected."""
+    T = 100
+    sim = AFMSimulator(grid_size=(16, 16))
+    trajectory = jnp.zeros((T, 1, 3))
+    
+    movie = sim.scan_movie(trajectory)
+    assert movie.shape == (T, 16, 16)
+
