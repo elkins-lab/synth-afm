@@ -8,9 +8,9 @@
 [![JAX](https://img.shields.io/badge/Accelerated_by-JAX-blue.svg)](https://github.com/google/jax)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-`synth-afm` is a JAX-powered toolkit for generating synthetic High-Speed Atomic Force Microscopy (HS-AFM) images and movies from atomistic protein structures. 
+`synth-afm` is a JAX-powered toolkit for generating synthetic High-Speed Atomic Force Microscopy (HS-AFM) images and movies from atomistic protein structures.
 
-Built with the **differentiable biophysics** philosophy, every step—from coordinate rotation to tip-collision height mapping—is end-to-end differentiable. 
+Built with the **differentiable biophysics** philosophy, every step—from coordinate rotation to tip-collision height mapping—is end-to-end differentiable.
 
 ---
 
@@ -48,7 +48,7 @@ pip install synth-afm
 
 Get started immediately with our interactive Jupyter notebooks:
 
-*   **[Quick Start: Differentiable HS-AFM Simulation](examples/quickstart_afm.ipynb)**: Learn how to generate height maps with tip dilation and scanning lag.  
+*   **[Quick Start: Differentiable HS-AFM Simulation](examples/quickstart_afm.ipynb)**: Learn how to generate height maps with tip dilation and scanning lag.
     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/synth-afm/blob/master/examples/quickstart_afm.ipynb)
 
 ## 🛠 Quick Start
@@ -63,9 +63,9 @@ coords, radii = load_coords_and_radii("molecule.pdb")
 
 # 2. Initialize simulator (1A pixel size, 2nm tip radius, 0.5A noise, slight tilt)
 sim = AFMSimulator(
-    pixel_size=1.0, 
-    tip_radius=20.0, 
-    noise_level=0.5, 
+    pixel_size=1.0,
+    tip_radius=20.0,
+    noise_level=0.5,
     substrate_tilt=(0.01, 0.0)
 )
 

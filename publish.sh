@@ -62,7 +62,7 @@ elif [ "$TARGET" = "prod" ]; then
     echo "Version: ${CURRENT_VERSION}"
     echo ""
     read -p "Are you sure? (yes/no): " CONFIRM
-    
+
     if [ "$CONFIRM" = "yes" ]; then
         echo ""
         echo -e "${YELLOW}Uploading to PyPI...${NC}"

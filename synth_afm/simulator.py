@@ -77,7 +77,7 @@ class AFMSimulator:
             img = simple_height_map_kernel(
                 positions, radii, self.grid_x, self.grid_y, self.smoothness
             )
-        
+
         # Apply tilt
         img = img + self.tilt_bg
 
@@ -130,7 +130,7 @@ class AFMSimulator:
 
         def _scan_one_frame(frame_idx: jax.Array, frame_key: Optional[jax.Array]) -> jax.Array:
             t_start_idx = frame_idx
-            
+
             def _scan_one_column(y_idx: jax.Array) -> jax.Array:
                 # Calculate time offset in units of trajectory steps
                 t_offset_exact = (y_idx * dt_line) / trajectory_dt
@@ -152,14 +152,14 @@ class AFMSimulator:
                 return res[:, 0]
 
             img = jax.vmap(_scan_one_column)(jnp.arange(w)).T
-            
+
             # Apply tilt
             img = img + self.tilt_bg
-            
+
             # Apply noise
             if self.noise_level > 0.0 and frame_key is not None:
                 img = img + jax.random.normal(frame_key, img.shape) * self.noise_level
-                
+
             return jnp.maximum(img, 0.0)
 
         if key is None and self.noise_level > 0.0:
@@ -168,21 +168,17 @@ class AFMSimulator:
         if key is not None:
             keys = jax.random.split(key, t_steps)
         else:
-            keys = jnp.zeros((t_steps, 2), dtype=jnp.uint32) # Dummy keys
+            keys = jnp.zeros((t_steps, 2), dtype=jnp.uint32)  # Dummy keys
 
-        def _body_fn(carry, x):
+        def _body_fn(carry: None, x: Tuple[jax.Array, jax.Array]) -> Tuple[None, jax.Array]:
             idx, k = x
             # Use key if it's not a dummy (meaning key was provided or defaulted)
             actual_key = k if key is not None else None
             return carry, _scan_one_frame(idx, actual_key)
 
-        _, movie = jax.lax.scan(
-            _body_fn, 
-            None, 
-            (jnp.arange(t_steps), keys)
-        )
-        
-        return movie
+        _, movie = jax.lax.scan(_body_fn, None, (jnp.arange(t_steps), keys))
+
+        return cast(jax.Array, movie)
 
     def compute_force_map(
         self,
@@ -192,7 +188,7 @@ class AFMSimulator:
         k_cantilever: float = 0.1,
     ) -> jax.Array:
         """
-        Experimental: Computes a force map (deflection) based on tip-sample 
+        Experimental: Computes a force map (deflection) based on tip-sample
         repulsion. Very simplified Hookean model.
         """
         sample_height = self.scan(positions, radii)

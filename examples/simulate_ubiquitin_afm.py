@@ -18,16 +18,11 @@ t = jnp.linspace(0, 10.0, n_atoms)
 x = 5.0 + 2.0 * jnp.cos(t)
 y = 5.0 + 2.0 * jnp.sin(t)
 z = t
-coords = jnp.stack([x, y, z], axis=1) # (100, 3)
+coords = jnp.stack([x, y, z], axis=1)  # (100, 3)
 
 # 2. Initialize the HS-AFM Simulator
 # We'll use 0.5 Angstrom pixels and a standard 10nm tip radius.
-sim = AFMSimulator(
-    pixel_size=0.5, 
-    grid_size=(64, 64), 
-    tip_radius=20.0, 
-    smoothness=0.2
-)
+sim = AFMSimulator(pixel_size=0.5, grid_size=(64, 64), tip_radius=20.0, smoothness=0.2)
 
 # 3. Perform a Static Scan
 print("Simulating static AFM scan...")
@@ -40,14 +35,12 @@ print("Generating trajectory...")
 trajectory_frames = []
 for angle in jnp.linspace(0, jnp.pi, 10):
     # Rotate around Z axis
-    rot = jnp.array([
-        [jnp.cos(angle), -jnp.sin(angle), 0],
-        [jnp.sin(angle),  jnp.cos(angle), 0],
-        [0, 0, 1]
-    ])
+    rot = jnp.array(
+        [[jnp.cos(angle), -jnp.sin(angle), 0], [jnp.sin(angle), jnp.cos(angle), 0], [0, 0, 1]]
+    )
     trajectory_frames.append(coords @ rot.T)
 
-trajectory = jnp.stack(trajectory_frames) # (10, 100, 3)
+trajectory = jnp.stack(trajectory_frames)  # (10, 100, 3)
 
 print("Simulating HS-AFM movie with scanning lag...")
 # We use a slow FPS to make the lag effects obvious

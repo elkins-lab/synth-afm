@@ -15,18 +15,18 @@ def load_coords_and_radii(file_path: str) -> Tuple[jnp.ndarray, jnp.ndarray]:
         tuple: (coords (N, 3), radii (N,)) as JAX arrays.
     """
     atom_array = strucio.load_structure(file_path)
-    
+
     # Filter for protein/nucleic atoms if necessary (optional)
     # atom_array = atom_array[struc.filter_amino_acids(atom_array)]
-    
+
     coords = jnp.array(atom_array.coord)
-    
+
     # Assign radii based on element
     elements = atom_array.element
     radii_list = []
     for elem in elements:
         radii_list.append(VDW_RADII.get(elem.upper(), DEFAULT_ATOM_RADIUS))
-    
+
     radii = jnp.array(radii_list)
-    
+
     return coords, radii
