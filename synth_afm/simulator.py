@@ -71,6 +71,7 @@ class AFMSimulator:
         trajectory: jax.Array,
         radii: Optional[jax.Array] = None,
         frames_per_second: float = 10.0,
+        trajectory_dt: Optional[float] = None,
         use_tip_dilation: bool = True,
     ) -> jax.Array:
         """
@@ -81,6 +82,8 @@ class AFMSimulator:
             trajectory: (T, N, 3) atomic coordinates over time.
             radii: (N,) atomic radii.
             frames_per_second: Nominal scan rate (FPS).
+            trajectory_dt: Time between trajectory steps (seconds). 
+                If None, assumes 1.0 / FPS.
             use_tip_dilation: Whether to use the realistic tip model.
 
         Returns:
@@ -92,13 +95,19 @@ class AFMSimulator:
         if radii is None:
             radii = jnp.full((n_atoms,), 1.7)
 
-        # Time per line in seconds (assuming constant scan speed)
+        # Time per line in seconds
         dt_line = 1.0 / (frames_per_second * h)
+        
+        # If trajectory_dt is not provided, we assume one trajectory step per frame duration
+        if trajectory_dt is None:
+            trajectory_dt = 1.0 / frames_per_second
 
         def _scan_one_frame(t_start_idx: jax.Array) -> jax.Array:
             def _scan_one_line(y_idx: jax.Array) -> jax.Array:
-                # Calculate time offset for this specific line
-                t_offset = jnp.round(y_idx * dt_line * frames_per_second).astype(jnp.int32)
+                # Calculate time offset in units of trajectory steps
+                # t_offset = (time elapsed) / (time per trajectory step)
+                t_offset_exact = (y_idx * dt_line) / trajectory_dt
+                t_offset = jnp.round(t_offset_exact).astype(jnp.int32)
                 t_curr = jnp.minimum(t_start_idx + t_offset, t_steps - 1)
                 
                 # Extract line grid

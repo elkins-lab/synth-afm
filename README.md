@@ -70,6 +70,32 @@ height_map = sim.scan(coords, radii)
 
 The height-mapping kernels are validated against the standard Villarrubia algorithm and verified to preserve atomic heights within 0.01 Å precision. The temporal lag simulation correctly reproduces the stroboscopic shearing effects documented in high-speed biological AFM (Ando et al., 2011).
 
+## 🔗 Related Projects
+
+`synth-afm` is part of a broader ecosystem for synthetic biophysics data generation:
+
+| Project | Purpose |
+|---|---|
+| [synth-pdb](https://github.com/elkins/synth-pdb) | Foundation: Realistic protein structure generation and PDB/mmCIF handling |
+| [synth-nmr](https://github.com/elkins/synth-nmr) | NMR observables (NOE, RDC, chemical shifts, J-couplings, relaxation) |
+| [synth-saxs](https://github.com/elkins/synth-saxs) | SAXS profile simulation via Debye formula |
+| [synth-cryo-em](https://github.com/elkins/synth-cryo-em) | Cryo-EM density map generation with CTF/noise modeling |
+| [synth-dynamics](https://github.com/georgeelkins/synth-dynamics) | ANM/Langevin dynamics for conformational ensembles |
+| [diff-biophys](https://github.com/elkins/diff-biophys) | Differentiable JAX implementations of all biophysics kernels |
+
 ## 📜 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
+## ✍️ Citation
+
+If you use `synth-afm` in your research, please cite:
+
+```bibtex
+@software{synth_afm,
+  author = {Elkins, George},
+  title = {synth-afm: Differentiable HS-AFM Simulation},
+  year = {2026},
+  url = {https://github.com/elkins/synth-afm}
+}
+```
