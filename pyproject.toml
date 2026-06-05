@@ -47,8 +47,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/elkins/synth-afm"
+Homepage = "https://elkins.github.io/synth-afm"
 Repository = "https://github.com/elkins/synth-afm"
+Documentation = "https://elkins.github.io/synth-afm"
+Changelog = "https://github.com/elkins/synth-afm/blob/master/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 include = ["synth_afm*"]
