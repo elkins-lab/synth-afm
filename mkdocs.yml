@@ -1,5 +1,5 @@
 site_name: synth-afm
-site_url: https://elkins.github.io/synth-afm
+site_url: https://elkins-lab.github.io/synth-afm
 repo_url: https://github.com/elkins/synth-afm
 repo_name: elkins/synth-afm
 site_description: Differentiable HS-AFM simulation from protein structures, powered by JAX
