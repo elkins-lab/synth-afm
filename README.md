@@ -3,7 +3,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/synth-afm)](https://pypi.org/project/synth-afm/)
 [![Python versions](https://img.shields.io/pypi/pyversions/synth-afm)](https://pypi.org/project/synth-afm/)
 [![Tests](https://github.com/elkins/synth-afm/actions/workflows/test.yml/badge.svg)](https://github.com/elkins/synth-afm/actions/workflows/test.yml)
-[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/elkins/synth-afm)
+[![codecov](https://codecov.io/gh/elkins/synth-afm/branch/master/graph/badge.svg)](https://codecov.io/gh/elkins/synth-afm)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![JAX](https://img.shields.io/badge/Accelerated_by-JAX-blue.svg)](https://github.com/google/jax)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
