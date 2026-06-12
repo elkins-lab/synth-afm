@@ -1,7 +1,7 @@
 # 🧬 synth-afm: Differentiable HS-AFM Simulation
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.1.1--dev-blue)](https://github.com/elkins/synth-afm)
-[![Supported Python versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://github.com/elkins/synth-afm)
+[![PyPI version](https://img.shields.io/pypi/v/synth-afm)](https://pypi.org/project/synth-afm/)
+[![Python versions](https://img.shields.io/pypi/pyversions/synth-afm)](https://pypi.org/project/synth-afm/)
 [![Tests](https://github.com/elkins/synth-afm/actions/workflows/test.yml/badge.svg)](https://github.com/elkins/synth-afm/actions/workflows/test.yml)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/elkins/synth-afm)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
