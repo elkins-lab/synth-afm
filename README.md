@@ -2,8 +2,8 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/synth-afm)](https://pypi.org/project/synth-afm/)
 [![Python versions](https://img.shields.io/pypi/pyversions/synth-afm)](https://pypi.org/project/synth-afm/)
-[![Tests](https://github.com/elkins/synth-afm/actions/workflows/test.yml/badge.svg)](https://github.com/elkins/synth-afm/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/elkins/synth-afm/branch/master/graph/badge.svg)](https://codecov.io/gh/elkins/synth-afm)
+[![Tests](https://github.com/elkins-lab/synth-afm/actions/workflows/test.yml/badge.svg)](https://github.com/elkins-lab/synth-afm/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/elkins-lab/synth-afm/branch/master/graph/badge.svg)](https://codecov.io/gh/elkins-lab/synth-afm)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![JAX](https://img.shields.io/badge/Accelerated_by-JAX-blue.svg)](https://github.com/google/jax)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -49,7 +49,7 @@ pip install synth-afm
 Get started immediately with our interactive Jupyter notebooks:
 
 *   **[Quick Start: Differentiable HS-AFM Simulation](examples/quickstart_afm.ipynb)**: Learn how to generate height maps with tip dilation and scanning lag.
-    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/synth-afm/blob/master/examples/quickstart_afm.ipynb)
+    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins-lab/synth-afm/blob/master/examples/quickstart_afm.ipynb)
 
 ## 🛠 Quick Start
 
@@ -83,12 +83,12 @@ The height-mapping kernels are validated against the standard Villarrubia algori
 
 | Project | Purpose |
 |---|---|
-| [synth-pdb](https://github.com/elkins/synth-pdb) | Foundation: Realistic protein structure generation and PDB/mmCIF handling |
-| [synth-nmr](https://github.com/elkins/synth-nmr) | NMR observables (NOE, RDC, chemical shifts, J-couplings, relaxation) |
-| [synth-saxs](https://github.com/elkins/synth-saxs) | SAXS profile simulation via Debye formula |
-| [synth-cryo-em](https://github.com/elkins/synth-cryo-em) | Cryo-EM density map generation with CTF/noise modeling |
-| [synth-dynamics](https://github.com/georgeelkins/synth-dynamics) | ANM/Langevin dynamics for conformational ensembles |
-| [diff-biophys](https://github.com/elkins/diff-biophys) | Differentiable JAX implementations of all biophysics kernels |
+| [synth-pdb](https://github.com/elkins-lab/synth-pdb) | Foundation: Realistic protein structure generation and PDB/mmCIF handling |
+| [synth-nmr](https://github.com/elkins-lab/synth-nmr) | NMR observables (NOE, RDC, chemical shifts, J-couplings, relaxation) |
+| [synth-saxs](https://github.com/elkins-lab/synth-saxs) | SAXS profile simulation via Debye formula |
+| [synth-cryo-em](https://github.com/elkins-lab/synth-cryo-em) | Cryo-EM density map generation with CTF/noise modeling |
+| [synth-dynamics](https://github.com/elkins-lab/synth-dynamics) | ANM/Langevin dynamics for conformational ensembles |
+| [diff-biophys](https://github.com/elkins-lab/diff-biophys) | Differentiable JAX implementations of all biophysics kernels |
 
 ## 📜 License
 
@@ -103,6 +103,6 @@ If you use `synth-afm` in your research, please cite:
   author = {Elkins, George},
   title = {synth-afm: Differentiable HS-AFM Simulation},
   year = {2026},
-  url = {https://github.com/elkins/synth-afm}
+  url = {https://github.com/elkins-lab/synth-afm}
 }
 ```

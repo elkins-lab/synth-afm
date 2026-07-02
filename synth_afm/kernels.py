@@ -13,6 +13,8 @@ def simple_height_map_kernel(
     """
     A differentiable forward kernel to compute a molecular height map.
     Uses a Log-Sum-Exp approximation to smoothly combine atomic heights.
+    Note: The background substrate is assumed to be at z=0.0, and the final
+    height map is clipped to be non-negative.
 
     Args:
         positions: (N, 3) array of atomic coordinates.
@@ -60,6 +62,9 @@ def tip_sample_height_map(
     Computes a height map where the tip radius is explicitly modeled.
     This simulates 'tip dilation' where the image is the dilation of the
     sample surface by the tip shape.
+
+    Note: The background substrate is assumed to be at z=0.0, and the final
+    height map is clipped to be non-negative.
 
     Technically, the height at grid point (x, y) is:
         H(x, y) = max_{atom i} (z_i + sqrt((r_i + r_tip)^2 - d_xy_i^2)) - r_tip

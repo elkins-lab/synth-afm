@@ -57,3 +57,19 @@ def test_force_map_repulsion() -> None:
     z_low = jnp.full((5, 5), 6.0)
     force_push = sim.compute_force_map(coords, radii, z_low)
     assert force_push[2, 2] > 0.0
+
+
+def test_io_filter_protein(tmp_path: pathlib.Path) -> None:
+    """Loading a PDB with filter_protein=True."""
+    pdb_content = (
+        "ATOM      1  N   ALA A   1       0.000   0.000   0.000  1.00  0.00           N\n"
+        "ATOM      2  CA  ALA A   1       1.458   0.000   0.000  1.00  0.00           C\n"
+        "HETATM    3  O   HOH A   2       2.009   1.362   0.000  1.00  0.00           O\n"
+        "END\n"
+    )
+    pdb_path = os.path.join(tmp_path, "test.pdb")
+    with open(pdb_path, "w") as f:
+        f.write(pdb_content)
+
+    coords, radii = load_coords_and_radii(pdb_path, filter_protein=True)
+    assert coords.shape == (2, 3)

@@ -75,3 +75,11 @@ def test_scan_movie_no_tip_dilation() -> None:
     trajectory = jnp.zeros((2, 5, 3))
     movie = sim.scan_movie(trajectory, use_tip_dilation=False)
     assert movie.shape == (2, 16, 16)
+
+
+def test_scan_default_noise() -> None:
+    """Scanning with noise but no key should generate noise automatically."""
+    sim = AFMSimulator(grid_size=(16, 16), noise_level=1.0)
+    coords = jnp.array([[8.0, 8.0, 5.0]])
+    img = sim.scan(coords)  # No PRNG key passed
+    assert jnp.std(img) > 0.0

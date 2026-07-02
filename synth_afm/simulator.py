@@ -189,7 +189,13 @@ class AFMSimulator:
     ) -> jax.Array:
         """
         Experimental: Computes a force map (deflection) based on tip-sample
-        repulsion. Very simplified Hookean model.
+        repulsion.
+
+        This uses a simplified Hookean elastic model where the tip acts as a
+        linear spring. The force is proportional to the compression depth
+        (sample_height - z_heights) multiplied by the cantilever stiffness
+        (k_cantilever). Returns force in arbitrary units (or pN if heights
+        are in nm and k is in N/m, depending on provided constants).
         """
         sample_height = self.scan(positions, radii)
         compression = jnp.maximum(sample_height - z_heights, 0.0)
